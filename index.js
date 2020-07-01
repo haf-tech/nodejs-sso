@@ -10,6 +10,7 @@ const express = require('express');
 const logger = require('morgan');
 const axios = require('axios');
 
+
 // OpenID, WebApp support
 const passport = require('passport');
 const WebAppStrategy = require('ibmcloud-appid').WebAppStrategy;
