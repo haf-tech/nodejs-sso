@@ -1,0 +1,65 @@
+# all-in.yaml
+# contains all resource for Kubernetes
+# could be for example use for Razee deployment
+---
+# nodejs-sso: Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nodejs-sso
+  name: nodejs-sso
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nodejs-sso
+  template:
+    metadata:
+      labels:
+        app: nodejs-sso
+    spec:
+      containers:
+        - image: nodejs-sso:latest
+          imagePullPolicy: Always
+          name: nodejs-sso
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          envFrom:
+          - secretRef:
+              name: nodejs-sso-secret
+---
+# nodejs-sso: Ingress
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: nodejs-sso-ingress
+  labels:
+    app: nodejs-sso
+spec:  
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: nodejs-sso
+          servicePort: 8080
+---
+# nodejs-sso: Service
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: nodejs-sso
+  name: nodejs-sso
+spec:
+  type: NodePort
+  ports:
+    - name: 8080-tcp
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app: nodejs-sso
+    

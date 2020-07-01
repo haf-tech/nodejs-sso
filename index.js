@@ -48,28 +48,19 @@ const LOGOUT_URL = "/ibm/bluemix/appid/logout";
 app.use(passport.initialize());
 app.use(passport.session());
 
-if (process.env.VCAP_SERVICES)
-{
-    var vcap = JSON.parse(process.env.VCAP_SERVICES);
 
-    // Debugging
-    for (var svcName in vcap) {
-        console.log(svcName);
-    }
-    console.log(vcap);
-    
-}
-
-const ssoProviderUrl = "example.com"
-const ssoSecretId = "abcdefc"
-const ssoClientId = "abcd"
+const ssoProviderUrl = process.env.OAUTH_URL;
+const ssoSecret = process.env.CLIENT_SECRET;
+const ssoClientId = process.env.CLIENT_ID;
+const ssoTenantId = process.env.TENANT_ID;
+const sspAppBaseUrl = process.env.REDIRECT_URL;
 
 passport.use(new WebAppStrategy({
-  tenantId: "{tenant-id}",
-  clientId: "{client-id}",
-  secret: "{secret}",
-  oauthServerUrl: "{oauth-server-url}",
-  redirectUri: "{app-url}" + CALLBACK_URL
+  tenantId: ssoTenantId,
+  clientId: ssoClientId,
+  secret: ssoSecret,
+  oauthServerUrl: ssoProviderUrl,
+  redirectUri: sspAppBaseUrl + CALLBACK_URL
 }));
 
 // Configure passportjs with user serialization/deserialization. This is required
@@ -127,7 +118,8 @@ app.get('/', (req, res) => {
 
 
 app.listen(app.get('port'), app.get('ip'), function() {
-    
+
+
     console.log("Node app is running at localhost:" + app.get('port'))
   })
 
