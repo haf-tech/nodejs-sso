@@ -20,8 +20,7 @@
                     // Already authenticated
                     $("#WhenAuthenticated").show();
                     $("#sub").text(data.sub);
-                    $("#name").text(data.name || "Anonymous");
-                    $("#picture").attr("src", data.picture || "");
+                    $("#name").text(data.given_name + " " + data.family_name || "Anonymous");                    
                 }).fail(function(){
                     // Not authenticated yet
                     $("#WhenNotAuthenticated").show();
@@ -37,15 +36,45 @@
     <hr/>
 
     <div id="WhenNotAuthenticated" class="hideOnStartup">
-        <h3>You're not authenticated :(</h3>
+        <div class="row">
+            <div class="col-sm">
+              Status
+            </div>
+            <div class="col-sm">
+              Not Authenticated
+            </div>            
+        </div>
     </div>
 
     <div id="WhenAuthenticated" class="hideOnStartup">
-        <h3>You're authenticated :)</h3>
-        <h3>Hello <span id="name"></span></h3>
-        <h4>Your userId is <span id="sub"></span></h4>
-        </p><img id="picture" width="150" height="150"/><br/><br/>
+        <div class="row">
+            <div class="col-sm">
+              Status
+            </div>
+            <div class="col-sm">
+              Authenticated
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col-sm">
+              User
+            </div>
+            <div class="col-sm">
+                <span id="name"></span>
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col-sm">
+              UserId
+            </div>
+            <div class="col-sm">
+                <span id="sub"></span>
+            </div>            
+        </div>
     </div>
+
+    <br />
+    
 
     <div id="LoginButtons">
         <a class="btn btn-primary" href="/ibm/appid/login">Login</a>
