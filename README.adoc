@@ -89,4 +89,10 @@ Test the application
 * Login URL link:http://127.0.0.1:5000/ibm/appid/login[]
 * Logout URL link:http://127.0.0.1:5000/ibm/appid/logout[]
 
+== References
+
+* IBM Cloud Docu - IBM App Id: link:https://cloud.ibm.com/docs/appid?topic=appid-getting-started[]
+* IBM Cloud Docu - App Id + Node.js: link:https://cloud.ibm.com/docs/appid?topic=appid-web-node[]
+* IBM App Id SDK Node.js: link:https://github.com/ibm-cloud-security/appid-serversdk-nodejs[]
+
 .
