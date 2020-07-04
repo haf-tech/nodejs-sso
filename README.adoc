@@ -22,20 +22,71 @@ link:https://github.com/ibm-cloud-security/appid-serversdk-nodejs[]
 
 .Configure App Id
 * Select the created IBM App Id Service
-* Configure Identity Provider (here using SAML)
-** Select `Manage Authentication` > `Identity Providers`
-** Select `SAML 2.0 Federation`
-** Download the metadata file
-** Upload this into your Identity Provider System and retrieve information `Entity ID`, `Sign in URL` and `Primary certificate`
-* Register the redirect urls
+** Configure Identity Provider (here using SAML)
+*** Select `Manage Authentication` > `Identity Providers`
+*** Select `SAML 2.0 Federation`
+*** Download the metadata file
+*** Upload this into your Identity Provider System and retrieve information `Entity ID`, `Sign in URL` and `Primary certificate`
+** Create `Service credentials` for your app
+*** Select `Service credentials`
+*** Click `New credential` and enter name and role
+*** Use the following fields to use IBM App Id: `clientId`, `tenantId`, `oauthServerUrl` and `secret`
+** Register the redirect urls
 ** Select IBM App Id Service
 ** Select `Manage Authentication`
 ** Select the 2nd tab `Authentication Settings`
 ** Add the web redirect URL. In general this is the callback URL which will used in the `redirect_uri` GET parameter
 
+== Test
+
+For testing the application locally
+
+* export the App ID parameters as environment variables and
+* add the redirect URL `http://127.0.0.1:5000/ibm/appid/callback` in IBM App Id
+
 ----
-$ npm install --save ibmcloud-appid
+$ cat run.sh
+#!/bin/sh
+
+export OAUTH_URL="https://...."
+export CLIENT_SECRET="NW....."
+export CLIENT_ID="12312322-aaaa-bbbb-cccc-acavavav"
+export TENANT_ID="12312324-dddd-eeee-ffff-23123ace222"
+export REDIRECT_URL="http://127.0.0.1:5000"
+
+npm start
+
+$ ./run.sh
+
+> blueprint-nodejs@1.0.0 start ../nodejs-sso
+> node index.js
+
+[2020-07-04T15:37:34.965] [INFO] appid-sdk - Initialized
+[2020-07-04T15:37:35.226] [INFO] appid-WebAppStrategy-config - clientId 12312322-aaaa-bbbb-cccc-acavavav
+[2020-07-04T15:37:35.227] [INFO] appid-WebAppStrategy-config - tenantId 12312324-dddd-eeee-ffff-23123ace222
+[2020-07-04T15:37:35.227] [INFO] appid-WebAppStrategy-config - secret [CANNOT LOG SECRET]
+[2020-07-04T15:37:35.227] [INFO] appid-WebAppStrategy-config - oauthServerUrl https://....
+[2020-07-04T15:37:35.227] [INFO] appid-WebAppStrategy-config - redirectUri http://127.0.0.1:5000/ibm/appid/callback
+Node app is running at localhost:5000
+[2020-07-04T15:39:54.372] [INFO] appid-public-key-util - Public keys updated
+[2020-07-04T15:39:54.379] [INFO] appid-token-util - token ver: 4
+[2020-07-04T15:39:54.379] [INFO] appid-token-util - token version is valid
+[2020-07-04T15:39:54.379] [INFO] appid-token-util - token aud: 12312322-aaaa-bbbb-cccc-acavavav
+[2020-07-04T15:39:54.603] [INFO] appid-token-util - token iss: https://...
+[2020-07-04T15:39:54.603] [INFO] appid-token-util - token ver: 4
+[2020-07-04T15:39:54.603] [INFO] appid-token-util - token version is valid
+[2020-07-04T15:39:54.603] [INFO] appid-token-util - token aud: 12312322-aaaa-bbbb-cccc-acavavav
+[2020-07-04T15:39:54.603] [INFO] appid-token-util - token iss: https://....
+
+user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:77.0) Gecko/20100101 Firefox/77.0
+
 ----
 
+Test the application
+
+* Main page, unrestricted link:http://127.0.0.1:5000/[]
+* Page displays auth profile details link:http://127.0.0.1:5000/webpage.html[]
+* Login URL link:http://127.0.0.1:5000/ibm/appid/login[]
+* Logout URL link:http://127.0.0.1:5000/ibm/appid/logout[]
 
 .
