@@ -1,3 +1,9 @@
 = Showcase: Node.js and SSO with OpenID / IBM App Id
 
+
+----
+$ npm install --save ibmcloud-appid
+----
+
+
 .

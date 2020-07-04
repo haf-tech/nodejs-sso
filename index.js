@@ -1,14 +1,23 @@
 /* ******************************
  * ShowCase: Nodejs and SSO (OpenID)
  *
+ * Details and Examples for IBM App ID
+ * https://github.com/ibm-cloud-security/appid-serversdk-nodejs
  * ******************************
 */
 
+const express = require('express');
+const session = require("express-session");
+// IBM App ID needs log4js
+const log4js = require("log4js");
 const promClient = require('prom-client');
 const promBundle = require("express-prom-bundle");
-const express = require('express');
-const logger = require('morgan');
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const flash = require("connect-flash");
 const axios = require('axios');
+
+
 
 
 // OpenID, WebApp support
@@ -22,9 +31,8 @@ const metricsMiddleware = promBundle({includeMethod: true, includePath: true});
 
 // Initialize
 var app = express();
+const logger = log4js.getLogger("nodejsAppId");
 
-
-app.use(logger('dev'));
 app.use(metricsMiddleware);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -36,24 +44,48 @@ const counterUserAgent = new promClient.Counter({name: 'http_request_blueprint_n
 // ############# Application configuration
 app.set('port', (process.env.PORT || 5000))
 app.set('ip', (process.env.IP || '0.0.0.0'))
+// ensure messages in sessions are available after redirects
+app.use(flash());
+app.use(cookieParser());
+// set up ejs for templating
+app.set('view engine', 'ejs'); 
 
 // ############# OAuth configuration
 
 // Below URLs will be used for App ID OAuth flows
-const LANDING_PAGE_URL = "/";
+const LANDING_PAGE_URL = "/webpage.html";
 const LOGIN_URL = "/ibm/bluemix/appid/login";
 const CALLBACK_URL = "/ibm/bluemix/appid/callback";
 const LOGOUT_URL = "/ibm/bluemix/appid/logout";
+const SIGN_UP_URL = "/ibm/bluemix/appid/sign_up";
+const CHANGE_PASSWORD_URL = "/ibm/bluemix/appid/change_password";
+const CHANGE_DETAILS_URL = "/ibm/bluemix/appid/change_details";
+const FORGOT_PASSWORD_URL = "/ibm/bluemix/appid/forgot_password";
+const LOGIN_ANON_URL = "/ibm/bluemix/appid/loginanon";
+const ROP_LOGIN_PAGE_URL = "/ibm/bluemix/appid/rop/login";
+
+
+// Setup express application to use express-session middleware
+// Must be configured with proper session storage for production
+// environments. See https://github.com/expressjs/session for
+// additional documentation
+app.use(session({
+	secret: "123456789",
+	resave: true,
+	saveUninitialized: true
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+// Retrieve the OpenID/OAuth information from the env
 const ssoProviderUrl = process.env.OAUTH_URL;
 const ssoSecret = process.env.CLIENT_SECRET;
 const ssoClientId = process.env.CLIENT_ID;
 const ssoTenantId = process.env.TENANT_ID;
 const sspAppBaseUrl = process.env.REDIRECT_URL;
+
+
 
 passport.use(new WebAppStrategy({
   tenantId: ssoTenantId,
@@ -97,6 +129,17 @@ app.get(LOGOUT_URL, function(req, res){
 // In case user is authenticated - a page with current user information will be returned.
 app.get("/protected", passport.authenticate(WebAppStrategy.STRATEGY_NAME), function(req, res){
   res.json(req.user);
+});
+
+app.post("/rop/login/submit", bodyParser.urlencoded({extended: false}), passport.authenticate(WebAppStrategy.STRATEGY_NAME, {
+	successRedirect: LANDING_PAGE_URL,
+	failureRedirect: ROP_LOGIN_PAGE_URL,
+	failureFlash : true // allow flash messages
+}));
+
+app.get(ROP_LOGIN_PAGE_URL, function(req, res) {
+	// render the page and pass in any flash data if it exists
+	res.render("login.ejs", { message: req.flash('error') });
 });
 
 
