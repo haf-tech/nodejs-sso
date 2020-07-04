@@ -54,15 +54,15 @@ app.set('view engine', 'ejs');
 
 // Below URLs will be used for App ID OAuth flows
 const LANDING_PAGE_URL = "/webpage.html";
-const LOGIN_URL = "/ibm/bluemix/appid/login";
-const CALLBACK_URL = "/ibm/bluemix/appid/callback";
-const LOGOUT_URL = "/ibm/bluemix/appid/logout";
-const SIGN_UP_URL = "/ibm/bluemix/appid/sign_up";
-const CHANGE_PASSWORD_URL = "/ibm/bluemix/appid/change_password";
-const CHANGE_DETAILS_URL = "/ibm/bluemix/appid/change_details";
-const FORGOT_PASSWORD_URL = "/ibm/bluemix/appid/forgot_password";
-const LOGIN_ANON_URL = "/ibm/bluemix/appid/loginanon";
-const ROP_LOGIN_PAGE_URL = "/ibm/bluemix/appid/rop/login";
+const LOGIN_URL = "/ibm/appid/login";
+const CALLBACK_URL = "/ibm/appid/callback";
+const LOGOUT_URL = "/ibm/appid/logout";
+const SIGN_UP_URL = "/ibm/appid/sign_up";
+const CHANGE_PASSWORD_URL = "/ibm/appid/change_password";
+const CHANGE_DETAILS_URL = "/ibm/appid/change_details";
+const FORGOT_PASSWORD_URL = "/ibm/appid/forgot_password";
+const LOGIN_ANON_URL = "/ibm/appid/loginanon";
+const ROP_LOGIN_PAGE_URL = "/ibm/appid/rop/login";
 
 
 // Setup express application to use express-session middleware
@@ -75,6 +75,9 @@ app.use(session({
 	saveUninitialized: true
 }));
 
+// Use static resources from current directory
+app.use(express.static(__dirname ));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -84,8 +87,6 @@ const ssoSecret = process.env.CLIENT_SECRET;
 const ssoClientId = process.env.CLIENT_ID;
 const ssoTenantId = process.env.TENANT_ID;
 const sspAppBaseUrl = process.env.REDIRECT_URL;
-
-
 
 passport.use(new WebAppStrategy({
   tenantId: ssoTenantId,

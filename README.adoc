@@ -1,5 +1,37 @@
 = Showcase: Node.js and SSO with OpenID / IBM App Id
+:author: Hafid Haddouti
+:toc: macro
+:toclevels: 4
+:sectlinks:
+:sectanchors:
 
+toc::[]
+
+== Overview
+
+This show case covers the OpenID integration in Node.js application using link:https://cloud.ibm.com/docs/appid?topic=appid-getting-started[IBM App Id] as facade for multiple OpenID/OAuth/Identity providers.
+
+The main steps and examples are re-used from the IBM App ID SDK for Node.js:
+link:https://github.com/ibm-cloud-security/appid-serversdk-nodejs[]
+
+== Configure IBM App Id
+
+.Create service
+* Register for link:https://cloud.ibm.com[IBM Cloud (for free)]
+* Create a new Service link:https://cloud.ibm.com/catalog/services/app-id[`IBM App Id`]
+
+.Configure App Id
+* Select the created IBM App Id Service
+* Configure Identity Provider (here using SAML)
+** Select `Manage Authentication` > `Identity Providers`
+** Select `SAML 2.0 Federation`
+** Download the metadata file
+** Upload this into your Identity Provider System and retrieve information `Entity ID`, `Sign in URL` and `Primary certificate`
+* Register the redirect urls
+** Select IBM App Id Service
+** Select `Manage Authentication`
+** Select the 2nd tab `Authentication Settings`
+** Add the web redirect URL. In general this is the callback URL which will used in the `redirect_uri` GET parameter
 
 ----
 $ npm install --save ibmcloud-appid

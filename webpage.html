@@ -9,10 +9,28 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     
+    <script type="text/javascript">
+            $(document).ready(function() {
+                $(".hideOnStartup").hide();
 
+                $.getJSON("/protected", function(data){
+                    // Already authenticated
+                    $("#WhenAuthenticated").show();
+                    $("#sub").text(data.sub);
+                    $("#name").text(data.name || "Anonymous");
+                    $("#picture").attr("src", data.picture || "");
+                }).fail(function(){
+                    // Not authenticated yet
+                    $("#WhenNotAuthenticated").show();
+                }).always(function(){
+                    $("#LoginButtons").show();
+                });
+            });
+    </script>
 </head>
 <body class="container">
     <h1>Node.js + IBM App ID</h1>
+    This page will display info about your profile if you logged in.
     <hr/>
 
     <div id="WhenNotAuthenticated" class="hideOnStartup">
@@ -26,14 +44,20 @@
         </p><img id="picture" width="150" height="150"/><br/><br/>
     </div>
 
-    <div id="LoginButtons" class="hideOnStartup">
-        <a class="btn btn-primary" href="/ibm/bluemix/appid/rop/login">Login using resource owner password (ROP)</a>
-        <a class="btn btn-primary" href="/ibm/bluemix/appid/loginanon">Login anonymously</a>
-        <a class="btn btn-primary" href="/ibm/bluemix/appid/login">Login</a>
+    <div id="LoginButtons">
+        <a class="btn btn-primary" href="/ibm/appid/login">Login</a>
+        <a class="btn btn-primary" href="/ibm/appid/logout">Logout</a>
+    </div>
+
+    <div id="FurtherButtons" class="hideOnStartup">
+        <a class="btn btn-primary" href="/ibm/appid/login">Login</a>
+        <a class="btn btn-primary" href="/ibm/appid/logout">Logout</a>
+
+        <a class="btn btn-primary" href="/ibm/appid/rop/login">Login ROP/resource owner password</a>
+        <a class="btn btn-primary" href="/ibm/appid/loginanon">Login anonymously</a>
+        
         <a class="btn btn-primary" href="/protected">Open protected page</a>
-        <a class="btn btn-primary" href="/ibm/bluemix/appid/change_password">Change Password</a>
-        <a class="btn btn-primary" href="/ibm/bluemix/appid/change_details">Change Details</a>
-        <a class="btn btn-primary" href="/ibm/bluemix/appid/logout">Logout</a>
+        
     </div>
 </body>
 
