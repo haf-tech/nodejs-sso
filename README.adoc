@@ -95,7 +95,6 @@ Test the application
 * IBM Cloud Docu - App Id + Node.js: link:https://cloud.ibm.com/docs/appid?topic=appid-web-node[]
 * IBM App Id SDK Node.js: link:https://github.com/ibm-cloud-security/appid-serversdk-nodejs[]
 
-
 == License
 
 This article is licensed under the Apache License, Version 2.
