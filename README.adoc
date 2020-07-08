@@ -89,6 +89,10 @@ Test the application
 * Login URL link:http://127.0.0.1:5000/ibm/appid/login[]
 * Logout URL link:http://127.0.0.1:5000/ibm/appid/logout[]
 
+== Misc
+
+* Published as article: link:https://my.center-of.info/2020/07/08/showcase-node-js-and-app-id/[]
+
 == References
 
 * IBM Cloud Docu - IBM App Id: link:https://cloud.ibm.com/docs/appid?topic=appid-getting-started[]
