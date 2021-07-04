@@ -88,6 +88,7 @@ Test the application
 * Page displays auth profile details link:http://127.0.0.1:5000/webpage.html[]
 * Login URL link:http://127.0.0.1:5000/ibm/appid/login[]
 * Logout URL link:http://127.0.0.1:5000/ibm/appid/logout[]
+* Accessing a remote secured backend link:http://127.0.0.1:5000/secure/backend[]
 
 == Misc
 
